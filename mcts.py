@@ -36,8 +36,9 @@ class MonteCarloTreeSearchNode():
         self._number_of_visits = 0
         self._results = defaultdict(int)
         self._results[1] = 0
+        self._results[-1] = 0
         self._untried_actions = None
-        self._untried_actions = state.untried_actions()
+        self._untried_actions = self.untried_actions()
         return
     """
     Return the number of untries actions
@@ -128,7 +129,7 @@ class MonteCarloTreeSearchNode():
     @return: the best child node
     """
     def best_child(self, c_param=0.1):
-        if len(self.children == 0):
+        if len(self.children) == 0:
             return self
         # UCT = win_rate / visited_times + c_param * sqrt(log(parent.visited_times) / visited_times)
         # score_weights = [((child.win_rate()/child.visited_times()) + c_param * np.sqrt((2 * np.log(self.visited_times()) / child.visited_times()))) for child in self.children] 
@@ -138,6 +139,8 @@ class MonteCarloTreeSearchNode():
             exploration = c_param * np.sqrt(2 * np.log(self.visited_times()) / child.visited_times())
             score = exploitation + exploration
             score_weights.append(score)
+        
+        return self.children[np.argmax(score_weights)]
     """
     Navigate the tree to find the best action
     @param: None
@@ -157,7 +160,7 @@ class MonteCarloTreeSearchNode():
     Perform the MCTS algorithm
     """
     def best_action(self):
-        no_simulations = 1000
+        no_simulations = 200
         for _ in range(no_simulations):
             v = self._tree_policy()
             reward = v.rollout()

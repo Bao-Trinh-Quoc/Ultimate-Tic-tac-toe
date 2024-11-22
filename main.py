@@ -55,6 +55,9 @@ def main(player_X, player_O, rule = 2):
         
     print("X:", cur_state.count_X)
     print("O:", cur_state.count_O)
+    # Printe remaining time
+    print("X:", remain_time_X)
+    print("O:", remain_time_O)
 
 
 main('random_agent', '_MSSV')
