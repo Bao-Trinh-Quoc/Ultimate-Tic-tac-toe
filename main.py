@@ -29,10 +29,12 @@ def main(player_X, player_O, rule = 2):
         if cur_state.player_to_move == 1:
             new_move = player_1.select_move(cur_state, remain_time_X)
             elapsed_time = time.time() - start_time
+            print("Player X's elapsed time: ", elapsed_time)
             remain_time_X -= elapsed_time
         else:
             new_move = player_2.select_move(cur_state, remain_time_O)
             elapsed_time = time.time() - start_time
+            print("Player Y's elapsed time: ", elapsed_time)
             remain_time_O -= elapsed_time
             
         if new_move == None:

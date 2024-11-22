@@ -1,6 +1,7 @@
 import numpy as np
 from collections import defaultdict
 import copy
+import time
 from state import UltimateTTT_Move
 from state import State, State_2
 
@@ -159,9 +160,9 @@ class MonteCarloTreeSearchNode():
     """
     Perform the MCTS algorithm
     """
-    def best_action(self):
-        no_simulations = 200
-        for _ in range(no_simulations):
+    def best_action(self, time_limit=1.0):
+        start_time = time.time()
+        while time.time() - start_time < time_limit:
             v = self._tree_policy()
             reward = v.rollout()
             v.backpropagate(reward)

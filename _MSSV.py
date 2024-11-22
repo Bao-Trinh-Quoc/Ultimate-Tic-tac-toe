@@ -9,5 +9,5 @@ from mcts import MonteCarloTreeSearchNode
 
 def select_move(cur_state, remain_time):
     root = MonteCarloTreeSearchNode(state = cur_state)
-    best_node = root.best_action()
+    best_node = root.best_action(2)
     return best_node.parent_action
