@@ -97,7 +97,18 @@ class MonteCarloTreeSearchNode():
     @return: random move from the list of possible moves
     @note: Could be improved by using a better policy for more efficient search
     """   
-    def rollout_policy(self, possible_moves):
+    def rollout_policy(self, possible_moves, state):
+        # Check for winning moves or blocking opponent's winning moves
+        for move in possible_moves:
+            new_state = my_act_moves(state, move)
+            if new_state.game_result(new_state.global_cells.reshape(3,3)) == move.value:
+                return move
+            opponent_move = UltimateTTT_Move(move.index_local_board, move.x, move.y, -move.value)
+            if state.is_valid_move(opponent_move):  # Check if the opponent's move is valid
+                new_state = my_act_moves(state, opponent_move)
+                if new_state.game_result(new_state.global_cells.reshape(3,3)) == -move.value:
+                    return move
+
         return possible_moves[np.random.randint(len(possible_moves))]
     """
     Simulation phase of the MCTS algorithm
@@ -110,7 +121,7 @@ class MonteCarloTreeSearchNode():
             possible_moves = current_rollout_state.get_valid_moves
             if len(possible_moves) == 0:
                 break
-            action = self.rollout_policy(possible_moves)
+            action = self.rollout_policy(possible_moves, current_rollout_state)
             current_rollout_state = my_act_moves(current_rollout_state, action)
         return current_rollout_state.game_result(current_rollout_state.global_cells.reshape(3,3))
     """
